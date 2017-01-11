@@ -1,0 +1,12 @@
+{
+  "name": "sonogram",
+  "version": "1.0.0",
+  "description": "Project designed to integrate a number of voice recognition tools with popular code editors in order to allow hands-free programming",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "author": "Michael Milton <michael.r.milton@gmail.com> (http://protomeric.com/)",
+  "license": "GPL"
+}
