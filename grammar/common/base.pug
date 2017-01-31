@@ -1,0 +1,36 @@
+grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/grammar', tag-format='semantics/1.0', root='command')
+  rule#command
+    item
+      ruleref(uri='#action')
+      item(repeat='0-1')
+        ruleref(uri='#direction')
+      item(repeat='0-1')
+        ruleref(uri='#number')
+      ruleref(uri='#unit')
+  rule#action
+    one-of
+      item delete
+      item move
+      item select
+      item copy
+  rule#direction
+    one-of
+      item up
+      item down
+      item left
+      item right
+  rule#number
+    item
+      one-of
+        - var n = 0
+        while n < 20
+          item=n++
+  rule#unit
+    one-of
+      item word
+      item line
+      item paragraph
+      item bracket
+      item brace
+      item parenthesis
+      item page

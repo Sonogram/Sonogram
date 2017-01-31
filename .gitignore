@@ -1,5 +1,6 @@
 # Custom
 .idea
+grammar/**/*.html
 
 # Logs
 logs
