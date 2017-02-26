@@ -1,4 +1,5 @@
-grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/grammar', tag-format='semantics/1.0', root='command')
+doctype xml
+grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/grammar', tag-format="semantics/1.0", root='command')
   rule#command
     item
       ruleref(uri='#action')
@@ -7,9 +8,12 @@ grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/gramma
       item(repeat='0-1')
         ruleref(uri='#number')
       ruleref(uri='#unit')
+    tag.
+      out = {action: rules.action, direction: rules.direction, number: rules.number, unit: rules.unit}
   rule#action
     one-of
       item delete
+        tag out = "delete"
       item move
       item select
       item copy
