@@ -12,7 +12,7 @@ const conf = require('rc')('sonogram', {
 // Directory containing all the grammar files
 const grammarBase = path.join(__dirname, 'grammar', 'langs')
 // The subscribed editors
-const editors = []
+let editors = []
 // The server
 const wss = new WebSocket.Server({port: conf.port});
 
@@ -53,10 +53,14 @@ wss.on('connection', ws => {
                     console.warn('Recognizer input received, but no editor is connected!')
                 else {
                     for (let editor of editors)
-                        editor.send(msg.speech)
-                    console.log(`"${msg.speech}" recognized and sent to ${editors.length} editor(s)`)
+                        editor.send(message)
+                    console.log(`"${msg.semantics}" recognized and sent to ${editors.length} editor(s)`)
                 }
                 break
         }
+    })
+
+    ws.on('close', () => {
+        editors = editors.filter(i => i != ws);
     })
 })
