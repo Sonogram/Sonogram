@@ -2,6 +2,54 @@ doctype xml
 grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/grammar', tag-format="semantics/1.0", root='command')
   rule#command
     item
+      one-of
+        item
+          ruleref(uri='#movement_command')
+        item
+          ruleref(uri='#jump')
+        item
+          ruleref(uri='#number_command')
+        item
+          ruleref(uri='#simple_command')
+
+  // The jump rule is unique - it can take a number, or not
+  rule#jump
+    item
+      item
+        one-of
+          item jump
+          item j
+      item(repeat='0-1')
+        ruleref(uri='#number')
+    tag.
+      out = {action: "jump", target: rules.number}
+
+  // A command that has no arguments, e.g. insert, which enters insert mode
+  rule#simple_command
+    item
+      ruleref(uri='#simple_command_type')
+    tag out = {action: rules.simple_command_type}
+
+  rule#simple_command_type
+    one-of
+     item insert
+
+  // A command that only has a number argument, e.g. undo 2, which undoes the last 2 actions
+  rule#number_command
+    item
+      ruleref(uri='#number_command_type')
+    item(repeat='0-1')
+      ruleref(uri='#number')
+    tag out = {action: rules.number_command_type, number: rules.number}
+
+  rule#number_command_type
+    one-of
+      item undo
+      item redo
+
+  // A command that moves by a given unit, a given number of times
+  rule#movement_command
+    item
       ruleref(uri='#action')
       item(repeat='0-1')
         ruleref(uri='#direction')
@@ -10,13 +58,32 @@ grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/gramma
       ruleref(uri='#unit')
     tag.
       out = {action: rules.action, direction: rules.direction, number: rules.number, unit: rules.unit}
+
   rule#action
     one-of
-      item delete
+      item
+        one-of
+          item delete
+          item d
         tag out = "delete"
-      item move
-      item select
-      item copy
+
+      item
+        one-of
+          item move
+          item m
+        tag out = "move"
+
+      item
+        one-of
+          item select
+          item s
+        tag out = "select"
+
+      item
+        one-of
+          item copy
+          item c
+        tag out = "copy"
   rule#direction
     one-of
       item up
@@ -27,12 +94,23 @@ grammar(version='1.0', xml:lang='en-US', xmlns='http://www.w3.org/2001/06/gramma
     item
       one-of
         - var n = 0
-        while n < 20
+        while n < 100
           item=n++
   rule#unit
     one-of
-      item word
-      item line
+
+      item
+        one-of
+          item word
+          item w
+        tag out = "word"
+
+      item
+        one-of
+          item line
+          item l
+        tag out = "line"
+
       item paragraph
       item bracket
       item brace

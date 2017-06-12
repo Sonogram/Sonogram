@@ -54,7 +54,7 @@ wss.on('connection', ws => {
                 else {
                     for (let editor of editors)
                         editor.send(message)
-                    console.log(`"${msg.semantics}" recognized and sent to ${editors.length} editor(s)`)
+                    console.log(`"${JSON.stringify(msg.semantics)}" recognized and sent to ${editors.length} editor(s)`)
                 }
                 break
         }
